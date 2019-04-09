@@ -3,8 +3,6 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Search from "./pages/Search";
 import Saved from "./pages/Saved";
 import Nav from "./components/Nav";
-require("dotenv").config();
-console.log(`${process.env.REACT_APP_google_API}`);
 
 function App() {
   

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import DeleteBtn from "../components/DeleteBtn";
+import BookCard from '../components/BookCard';
 import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
 import { Link } from "react-router-dom";
@@ -33,9 +33,13 @@ class Search extends Component {
   handleFormSubmit = event => {
     event.preventDefault();
     if (this.state.search) {
+      console.log(this.state.search);
       API.search(this.state.search
       )
-        .then(res => this.setState({results: res}))
+        .then(res => {
+          this.setState({ results: res.data.items })
+          console.log(this.state.results)
+        })
         .catch(err => console.log(err));
     }
   };
@@ -44,7 +48,7 @@ class Search extends Component {
     return (
       <Container fluid>
         <Row>
-          <Col size="md-6">
+          <Col size="12">
             <Jumbotron>
               <h1>What was that Book again?</h1>
             </Jumbotron>
@@ -62,7 +66,7 @@ class Search extends Component {
               </FormBtn>
             </form>
           </Col>
-          <Col size="md-6 sm-12">
+          <Col size="12">
             {this.state.results.length ? (
               <Container>
                 <Jumbotron>
@@ -70,13 +74,12 @@ class Search extends Component {
                 </Jumbotron>
                 <List>
                   {this.state.results.map(result => (
-                    <ListItem key={result._id}>
-                      <Link to={"/books/" + result._id}>
-                        <strong>
-                          {result.title} by {result.author}
-                        </strong>
-                      </Link>
-                      <DeleteBtn onClick={() => this.deleteBook(result._id)} />
+                    <ListItem key={result.id}>
+                      <BookCard thumbnail={result.volumeInfo.imageLinks.thumbnail} 
+                      title={result.volumeInfo.title}
+                      authors={result.volumeInfo.authors}
+                      description=
+                    {result.volumeInfo.description}/>
                     </ListItem>
                   ))}
                 </List>
