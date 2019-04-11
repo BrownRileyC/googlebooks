@@ -1,20 +1,34 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import { Col, Row, Container } from "../components/Grid";
+import BookCard from '../components/BookCard';
 import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
+import { Col, Row, Container } from "../components/Grid";
+import { List, ListItem } from "../components/List";
+
 
 class Saved extends Component {
   state = {
     books: []
   };
-  // When this component mounts, grab the book with the _id of this.props.match.params.id
-  // e.g. localhost:3000/books/599dcb67f0f16317844583fc
+
+
   componentDidMount() {
-    API.getBook(this.props.match.params.id)
-      .then(res => this.setState({ book: res.data }))
+    API.getBooks()
+      .then(res => {console.log(res)
+        this.setState({ books: res.data })})
       .catch(err => console.log(err));
-  }
+  };
+
+  deleteBook = (event, index) => {
+    event.preventDefault();
+
+    API.deleteBook(index).then(res => {
+      API.getBooks()
+      .then(res => {console.log(res)
+        this.setState({ books: res.data })})
+      .catch(err => console.log(err));
+    }).catch(err => console.log(err))
+  };
 
   render() {
     return (
@@ -23,24 +37,20 @@ class Saved extends Component {
           <Col size="md-12">
             <Jumbotron>
               <h1>
-                {this.state.book.title} by {this.state.book.author}
+                Hey, These are the saved books!
               </h1>
             </Jumbotron>
-          </Col>
-        </Row>
-        <Row>
-          <Col size="md-10 md-offset-1">
-            <article>
-              <h1>Synopsis</h1>
-              <p>
-                {this.state.book.synopsis}
-              </p>
-            </article>
-          </Col>
-        </Row>
-        <Row>
-          <Col size="md-2">
-            <Link to="/">← Back to Authors</Link>
+            <List>
+                  {this.state.books.map((result, index) => (
+                    <ListItem key={index}>
+                      <BookCard state='saved' id={result._id} thumbnail={result.image} 
+                      title={result.title}
+                      authors={result.authors}
+                      description=
+                    {result.description} view={result.link} alterBook={this.deleteBook}/>
+                    </ListItem>
+                  ))}
+                </List>
           </Col>
         </Row>
       </Container>

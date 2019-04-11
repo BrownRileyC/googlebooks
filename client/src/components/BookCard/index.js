@@ -11,18 +11,21 @@ function BookCard(props) {
                     <strong>
                         Title: {props.title}
                     </strong>
-                    <br/>
+                    <br />
                     <strong>
-                        Author(s): {props.authors.map(author => (" "+author))}
+                        Author(s): {props.authors.map(author => (" " + author))}
                     </strong>
-                    <br/>
+                    <br />
                     <p>
                         {props.description}
                     </p>
                 </div>
                 <div className='col-1'>
-                <button>Save</button>
-                <button>View</button>
+                    {props.state === 'saved' ? (
+                        <button data-id={props.id} onClick={(e) => props.alterBook(e, props.id)}>Delete</button>
+                    ) : (<button data-id={props.id} onClick={(e) => props.alterBook(e, props.id)}>Save</button>)}
+
+                    <a href={props.view} target='_blank'><button>View</button></a>
                 </div>
             </div>
         </div>

@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import BookCard from '../components/BookCard';
 import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
-import { Link } from "react-router-dom";
 import { Col, Row, Container } from "../components/Grid";
 import { List, ListItem } from "../components/List";
 import { Input, FormBtn } from "../components/Form";
@@ -13,14 +12,21 @@ class Search extends Component {
     search: ""
   };
 
-  // loadBooks = () => {
-  //   API.getBooks()
-  //     .then(res =>
-  //       this.setState({ books: res.data, search: ""})
-  //     )
-  //     .catch(err => console.log(err));
-  // };
+  saveBook = (event, index) => {
+    event.preventDefault();
 
+    const result = this.state.results[index];
+    const newBook = {
+      title: result.volumeInfo.title,
+      authors: result.volumeInfo.authors,
+      description:result.volumeInfo.description,
+      image: result.volumeInfo.imageLinks.thumbnail,
+      link: result.volumeInfo.infoLink
+    };
+    console.log(newBook)
+    API.saveBook(newBook).catch(err => console.log(err));
+  }
+  
   // Books can either be saved to database or they can be looked at more closely (going to their google books page)
 
   handleInputChange = event => {
@@ -73,13 +79,13 @@ class Search extends Component {
                   <h1>Here's what we Found</h1>
                 </Jumbotron>
                 <List>
-                  {this.state.results.map(result => (
-                    <ListItem key={result.id}>
-                      <BookCard thumbnail={result.volumeInfo.imageLinks.thumbnail} 
+                  {this.state.results.map((result, index) => (
+                    <ListItem key={index}>
+                      <BookCard state='unsaved' id={index} thumbnail={result.volumeInfo.imageLinks.thumbnail} 
                       title={result.volumeInfo.title}
                       authors={result.volumeInfo.authors}
                       description=
-                    {result.volumeInfo.description}/>
+                    {result.volumeInfo.description} view={result.volumeInfo.infoLink} alterBook={this.saveBook}/>
                     </ListItem>
                   ))}
                 </List>
