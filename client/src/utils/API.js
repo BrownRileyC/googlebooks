@@ -1,5 +1,5 @@
 import axios from "axios";
-const googleBooksKey = `${process.env.REACT_APP_google_API}`
+const googleBooksKey = `${process.env.REACT_APP_googleBooks}`
 
 export default {
   search: function (searchQuery) {

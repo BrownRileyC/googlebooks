@@ -23,7 +23,6 @@ class Search extends Component {
       image: result.volumeInfo.imageLinks.thumbnail,
       link: result.volumeInfo.infoLink
     };
-    console.log(newBook)
     API.saveBook(newBook).catch(err => console.log(err));
   }
   
@@ -39,13 +38,9 @@ class Search extends Component {
   handleFormSubmit = event => {
     event.preventDefault();
     if (this.state.search) {
-      console.log(this.state.search);
       API.search(this.state.search
       )
-        .then(res => {
-          this.setState({ results: res.data.items })
-          console.log(this.state.results)
-        })
+        .then(res => this.setState({ results: res.data.items }))
         .catch(err => console.log(err));
     }
   };
