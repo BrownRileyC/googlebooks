@@ -11,11 +11,9 @@ class Saved extends Component {
     books: []
   };
 
-
   componentDidMount() {
     API.getBooks()
-      .then(res => {console.log(res)
-        this.setState({ books: res.data })})
+      .then(res => this.setState({ books: res.data }))
       .catch(err => console.log(err));
   };
 
@@ -24,8 +22,7 @@ class Saved extends Component {
 
     API.deleteBook(index).then(res => {
       API.getBooks()
-      .then(res => {console.log(res)
-        this.setState({ books: res.data })})
+      .then(res => this.setState({ books: res.data }))
       .catch(err => console.log(err));
     }).catch(err => console.log(err))
   };
